@@ -9,7 +9,7 @@ public interface ProductsService {
 
     ProductBoundary getProduct(String productId);
 
-    List<ProductBoundary> getAllProducts(int size, int page, String sortBy, String sortOrder);
+    List<ProductBoundary> getAllProducts(String filterType, String filterValue, String sortBy, String sortOrder, int page, int size);
 
     //List<ProductBoundary> getAllProductsByCriteria(String criteriaType, String criteriaValue,
                                              //      int size, int page, String sortBy, String sortOrder);

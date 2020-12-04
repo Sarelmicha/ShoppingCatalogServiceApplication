@@ -24,11 +24,13 @@ public class ProductsController {
 
     @RequestMapping(path = "/shopping/products", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductBoundary[] getAllProducts(
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "filterType", required = false) String filterType,
+            @RequestParam(name = "filterValue", required = false) String filterValue,
             @RequestParam(name = "sortBy", required = false, defaultValue = "price") String sortBy,
-            @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder) {
-        return productsService.getAllProducts(size,page,sortBy,sortOrder).toArray(new ProductBoundary[0]);
+            @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int size){
+        return productsService.getAllProducts(filterType, filterValue, sortBy, sortOrder, page, size).toArray(new ProductBoundary[0]);
     }
 
 

@@ -2,9 +2,11 @@ package acs.logic.db;
 import acs.boundary.ProductBoundary;
 import acs.dao.CategoryDao;
 import acs.dao.ProductDao;
+import acs.data.CategoryEntity;
 import acs.data.ProductEntity;
 import acs.exceptions.NotFoundException;
 import acs.logic.ProductsService;
+import acs.logic.utils.FilterType;
 import acs.logic.utils.ProductConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -13,14 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class DatabaseProductsService implements ProductsService {
-    private ProductDao productDao; // Data access object
-    private ProductConverter converter;
-    private CategoryDao categoryDao;
+    private final ProductDao productDao; // Data access object
+    private final ProductConverter converter;
+    private final CategoryDao categoryDao;
 
     @Autowired
     public DatabaseProductsService(ProductDao productDao, CategoryDao categoryDao, ProductConverter converter) {
@@ -39,7 +42,18 @@ public class DatabaseProductsService implements ProductsService {
 //            throw new AlreadyExistsException("This product already exists");
 //        }
         ProductEntity productEntity = this.converter.toEntity(productBoundary);
-        productEntity = this.productDao.save(productEntity);
+        Optional<ProductEntity> productInDB = this.productDao.findById(productEntity.getId());
+
+        if(productInDB.isPresent()){
+            throw new RuntimeException("Product with categorical number " + productEntity.getId() + " already exist");
+        }
+        CategoryEntity categoryInDB = this.categoryDao.findOneByName(productBoundary.getCategory().getName());
+        if(categoryInDB==null){
+            throw  new RuntimeException("Category for product doesn't exist");
+        }
+
+        categoryInDB.addProductElement(productEntity);
+        this.productDao.save(productEntity);
         return this.converter.fromEntity(productEntity);
     }
 
@@ -50,11 +64,29 @@ public class DatabaseProductsService implements ProductsService {
     }
 
     @Override
-    public List<ProductBoundary> getAllProducts(int size, int page, String sortBy, String sortOrder) {
+    public List<ProductBoundary> getAllProducts(String filterType, String filterValue, String sortBy, String sortOrder, int page, int size) {
+
+        if (filterType != null && filterValue != null) {
+            if (filterType.equals(FilterType.NAME.toString())) {
+                return this.productDao
+                        .findAllByNameLikeIgnoreCase(filterValue,
+                                PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
+                        .stream().map(this.converter::fromEntity).collect(Collectors.toList());
+            } else if (filterType.equals(FilterType.MIN_PRICE.toString())) {
+                return this.productDao
+                        .findAllByPriceGreaterThan(Float.parseFloat(filterValue),
+                                PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
+                        .stream().map(this.converter::fromEntity).collect(Collectors.toList());
+            } else if (filterType.equals(FilterType.MAX_PRICE.toString())) {
+                return productDao.findAllByPriceLessThan(Float.parseFloat(filterValue),
+                        PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
+                        .stream().map(this.converter::fromEntity).collect(Collectors.toList());
+            }
+        }
+
         return this.productDao.findAll(
                 PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy)).getContent()
                 .stream().map(this.converter::fromEntity).collect(Collectors.toList());
     }
-
 
 }
