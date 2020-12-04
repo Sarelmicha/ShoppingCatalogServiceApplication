@@ -10,9 +10,8 @@ import java.util.Set;
 @Node(labels = "CATEGORY")
 public class CategoryEntity {
 
-    @Id
-    @GeneratedValue
-    private long id;
+    @Id @GeneratedValue private Long id;
+
     private String name;        // EMAIL PK VARCHAR(255)
 //    @NotEmpty(message="Description can not be empty")
     private String description ;    // FIRST VARCHAR(255)
@@ -55,6 +54,5 @@ public class CategoryEntity {
     public void addProductElement(ProductEntity product) {
         this.productsElements.add(product);
     }
-
 
 }

@@ -30,7 +30,7 @@ public class DatabaseCategoriesService implements EnhancedCategoriesService {
 	@Transactional
 	public CategoryBoundary createCategory(CategoryBoundary categoryBoundary) {
 		CategoryEntity categoryEntity = this.converter.toEntity(categoryBoundary);
-		CategoryEntity category = categoryDao.findByName(categoryEntity.getName());
+		CategoryEntity category = categoryDao.findOneByName(categoryEntity.getName());
 		if(category != null)
 			throw new AlreadyExistsException("Category name already exists");
 		categoryEntity = this.categoryDao.save(categoryEntity);

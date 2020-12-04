@@ -11,22 +11,21 @@ import java.util.Map;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-
     @Id
     @GeneratedValue
-    private long id;        // ID PK VARCHAR(255)
+    private long id;
 
 //    @NotEmpty(message="Name can not be empty")
-    private String name;    // NAME VARCHAR(255)
+    private String name;
 
 //    @NotEmpty(message="Price can not be empty")
     private Float price;
 
 //    @NotEmpty(message="Image can not be empty")
-    private String image;    // IMAGE VARCHAR(255)
+    private String image;
 
     @Convert(acs.logic.utils.MapToJsonConverter.class)
-    private Map<Long, Object> productDetails; // ELEMENT_ATTRIBUTES CLOB
+    private Map<String, Object> productDetails;
 
     private CategoryEntity category;
 
@@ -34,7 +33,7 @@ public class ProductEntity {
         this.productDetails = new HashMap<>();
     }
 
-    public ProductEntity(long id, String name, Float price, String image, Map<Long, Object> productDetails) {
+    public ProductEntity(long id, String name, Float price, String image, Map<String, Object> productDetails) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -75,11 +74,11 @@ public class ProductEntity {
         this.image = image;
     }
 
-    public Map<Long, Object> getProductDetails() {
+    public Map<String, Object> getProductDetails() {
         return productDetails;
     }
 
-    public void setProductDetails(Map<Long, Object> productDetails) {
+    public void setProductDetails(Map<String, Object> productDetails) {
         this.productDetails = productDetails;
     }
 

@@ -4,6 +4,7 @@ import acs.boundary.ProductBoundary;
 import java.util.List;
 
 public interface ProductsService {
+
     ProductBoundary createProduct(ProductBoundary productBoundary);
 
     ProductBoundary getProduct(String productId);

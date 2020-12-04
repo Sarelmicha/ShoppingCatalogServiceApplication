@@ -34,13 +34,10 @@ public class DatabaseProductsService implements ProductsService {
     @Override
     @Transactional
     public ProductBoundary createProduct(ProductBoundary productBoundary) {
-        String uuid = UUID.randomUUID().toString();
-
 //        ProductEntity product = this.productDao.findById(uuid).
 //        if(product != null){
 //            throw new AlreadyExistsException("This product already exists");
 //        }
-        productBoundary.setId(uuid);
         ProductEntity productEntity = this.converter.toEntity(productBoundary);
         productEntity = this.productDao.save(productEntity);
         return this.converter.fromEntity(productEntity);
@@ -48,7 +45,7 @@ public class DatabaseProductsService implements ProductsService {
 
     @Override
     public ProductBoundary getProduct(String productId) {
-        return this.converter.fromEntity(this.productDao.findById(productId).
+        return this.converter.fromEntity(this.productDao.findById(Long.parseLong(productId)).
                 orElseThrow(()-> new NotFoundException("Product does not exists")));
     }
 

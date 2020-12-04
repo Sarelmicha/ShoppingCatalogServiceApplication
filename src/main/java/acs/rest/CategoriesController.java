@@ -56,6 +56,4 @@ public class CategoriesController {
 	public CategoryBoundary createCategory(@RequestBody CategoryBoundary categoryBoundary) {
 		return categoriesService.createCategory(categoryBoundary);
 	}
-
-
 }
