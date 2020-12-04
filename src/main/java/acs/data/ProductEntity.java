@@ -11,9 +11,7 @@ import java.util.Map;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-    @Id
-    @GeneratedValue
-    private long id;
+    @Id @GeneratedValue private Long id;
 
 //    @NotEmpty(message="Name can not be empty")
     private String name;
