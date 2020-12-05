@@ -11,7 +11,7 @@ public class ProductDetailEntity {
 
     private String key;
     //    @NotEmpty(message="Description can not be empty")
-    private Object value ;    // FIRST VARCHAR(255)
+    private Object value ;
 
     public ProductDetailEntity() {
     }

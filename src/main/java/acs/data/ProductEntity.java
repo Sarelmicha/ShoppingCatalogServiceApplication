@@ -1,13 +1,10 @@
 package acs.data;
-import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Node(labels="PRODUCT")
@@ -24,19 +21,18 @@ public class ProductEntity {
     private String image;
 
 //    @Convert(acs.logic.utils.MapToJsonConverter.class)
-    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductDetailEntity> productDetailsElements;
+    @Relationship(type = "belongs", direction = Relationship.Direction.OUTGOING) private Set<ProductDetailEntity> productDetails;
     @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity categoryEntity;
 
     public ProductEntity() {
-        this.productDetailsElements = new HashSet<>();
+        this.productDetails = new HashSet<>();
     }
 
-    public ProductEntity(Long id, String name, Float price, String image,  Set<ProductDetailEntity> productDetailsElements) {
-        this.id = id;
+    public ProductEntity(String name, Float price, String image,  Set<ProductDetailEntity> productDetailsElements) {
         this.name = name;
         this.price = price;
         this.image = image;
-        this.productDetailsElements = productDetailsElements;
+        this.productDetails = productDetailsElements;
 
     }
 
@@ -79,12 +75,12 @@ public class ProductEntity {
         this.categoryEntity = categoryEntity;
     }
 
-    public Set<ProductDetailEntity> getProductDetailsElements() {
-        return productDetailsElements;
+    public Set<ProductDetailEntity> getProductDetails() {
+        return productDetails;
     }
 
-    public void setProductDetailsElements(Set<ProductDetailEntity> productDetailsElements) {
-        this.productDetailsElements = productDetailsElements;
+    public void setProductDetails(Set<ProductDetailEntity> productDetails) {
+        this.productDetails = productDetails;
     }
 
 }

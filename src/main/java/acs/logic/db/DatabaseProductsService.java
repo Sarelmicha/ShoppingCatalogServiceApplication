@@ -30,9 +30,8 @@ public class DatabaseProductsService implements ProductsService {
         this.categoryDao = categoryDao;
     }
 
-    // TODO check with eyal
     @Override
-//    @Transactional
+    @Transactional
     public ProductBoundary createProduct(ProductBoundary productBoundary) {
 
         ProductEntity productEntity = this.converter.toEntity(productBoundary);
@@ -61,6 +60,7 @@ public class DatabaseProductsService implements ProductsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductBoundary> getAllProducts(String filterType, String filterValue, String sortBy, String sortOrder, int page, int size) {
 
         if (filterType != null && filterValue != null) {
@@ -83,9 +83,9 @@ public class DatabaseProductsService implements ProductsService {
                  CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
                  Set<ProductEntity> set = new HashSet<>();
                  findAllProducts(categoryEntity, set);
-                 return set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());
+                 List<ProductBoundary> allProducts = set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());
+                 return allProducts;
             }
-
         }
 
         return this.productDao.findAll(

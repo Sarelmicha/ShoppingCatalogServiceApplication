@@ -23,7 +23,7 @@ public class ProductConverter {
         rv.setImage(entity.getImage());
         rv.setName(entity.getName());
         rv.setPrice(entity.getPrice());
-        rv.setProductDetails(setToProductDetailEntityMap(entity.getProductDetailsElements()));
+        rv.setProductDetails(setToProductDetailEntityMap(entity.getProductDetails()));
         rv.setCategory(categoryConverter.fromEntity(entity.getCategoryEntity()));
         return rv;
     }
@@ -35,7 +35,7 @@ public class ProductConverter {
         rv.setName(boundary.getName());
         rv.setPrice(boundary.getPrice());
         rv.setCategoryEntity(categoryConverter.toEntity(boundary.getCategory()));
-        rv.setProductDetailsElements(mapToProductDetailEntitySet(boundary.getProductDetails()));
+        rv.setProductDetails(mapToProductDetailEntitySet(boundary.getProductDetails()));
         return rv;
     }
 

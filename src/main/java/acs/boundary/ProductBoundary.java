@@ -13,7 +13,7 @@ public class ProductBoundary {
 
     public ProductBoundary() {
     }
-    // TODO Add category attribute
+
     public ProductBoundary(String id, String name, Float price, String image, Map<String, Object> productDetails
             ,CategoryBoundary category) {
         this.id = id;
