@@ -47,9 +47,10 @@ public class DatabaseProductsService implements ProductsService {
         if(categoryInDB == null){
             throw  new RuntimeException("Category for product doesn't exist");
         }
-
-        categoryInDB.addProductElement(productEntity);
+        productEntity.setCategoryEntity(categoryInDB);
+        System.out.println(categoryInDB);
         this.productDao.save(productEntity);
+//        this.categoryDao.save(categoryInDB);
         return this.converter.fromEntity(productEntity);
     }
 

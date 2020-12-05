@@ -4,6 +4,7 @@ import acs.boundary.CategoryBoundary;
 import acs.dao.CategoryDao;
 import acs.data.CategoryEntity;
 import acs.exceptions.AlreadyExistsException;
+import acs.exceptions.NotFoundException;
 import acs.logic.EnhancedCategoriesService;
 import acs.logic.utils.CategoryConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,19 @@ public class DatabaseCategoriesService implements EnhancedCategoriesService {
 	@Override
 	@Transactional
 	public CategoryBoundary createCategory(CategoryBoundary categoryBoundary) {
+
 		CategoryEntity categoryEntity = this.converter.toEntity(categoryBoundary);
 		CategoryEntity category = categoryDao.findOneByName(categoryEntity.getName());
-		if(category != null)
+		if (category != null)
 			throw new AlreadyExistsException("Category name already exists");
+
+		if(categoryBoundary.getParentCategory() != null) {
+			CategoryEntity categoryParent = categoryDao.findOneByName(categoryBoundary.getParentCategory());
+			if (categoryParent == null) {
+				throw new NotFoundException("parent category does not exists.");
+			}
+			categoryEntity.setParentCategory(categoryParent);
+		}
 		categoryEntity = this.categoryDao.save(categoryEntity);
 		return this.converter.fromEntity(categoryEntity);
 	}

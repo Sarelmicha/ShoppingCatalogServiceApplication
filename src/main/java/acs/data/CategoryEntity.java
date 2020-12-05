@@ -16,15 +16,16 @@ public class CategoryEntity {
 //    @NotEmpty(message="Description can not be empty")
     private String description ;    // FIRST VARCHAR(255)
 
-    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductEntity> productsElements;
+    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
+
     public CategoryEntity() {
-        this.productsElements = new HashSet<>();
     }
 
-    public CategoryEntity(String name, String description) {
+    public CategoryEntity(String name, String description, CategoryEntity parentCategory) {
         super();
         this.name = name;
         this.description = description;
+        this.parentCategory = parentCategory;
     }
 
     public String getName() {
@@ -43,16 +44,11 @@ public class CategoryEntity {
         this.description = description;
     }
 
-    public Set<ProductEntity> getProductsElements() {
-        return productsElements;
+    public CategoryEntity getParentCategory() {
+        return parentCategory;
     }
 
-    public void setProductsElements(Set<ProductEntity> productsElements) {
-        this.productsElements = productsElements;
+    public void setParentCategory(CategoryEntity parentCategory) {
+        this.parentCategory = parentCategory;
     }
-
-    public void addProductElement(ProductEntity product) {
-        this.productsElements.add(product);
-    }
-
 }

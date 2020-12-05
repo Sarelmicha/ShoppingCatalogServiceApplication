@@ -24,9 +24,11 @@ public class ProductEntity {
     private String image;
 
 //    @Convert(acs.logic.utils.MapToJsonConverter.class)
-  @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductDetailEntity> productDetailsElements;
+    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductDetailEntity> productDetailsElements;
 
-    private CategoryEntity category;
+    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity categoryEntity;
+
+
 
     public ProductEntity() {
         this.productDetailsElements = new HashSet<>();
@@ -72,6 +74,14 @@ public class ProductEntity {
         this.image = image;
     }
 
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
+
     public Set<ProductDetailEntity> getProductDetailsElements() {
         return productDetailsElements;
     }
@@ -80,11 +90,4 @@ public class ProductEntity {
         this.productDetailsElements = productDetailsElements;
     }
 
-    public CategoryEntity getCategory() {
-        return category;
-    }
-
-    public void setCategory(CategoryEntity category) {
-        this.category = category;
-    }
 }

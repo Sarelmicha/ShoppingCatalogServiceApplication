@@ -1,7 +1,13 @@
 package acs.logic.utils;
 import acs.boundary.ProductBoundary;
+import acs.data.ProductDetailEntity;
 import acs.data.ProductEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 public class ProductConverter {
@@ -17,8 +23,8 @@ public class ProductConverter {
         rv.setImage(entity.getImage());
         rv.setName(entity.getName());
         rv.setPrice(entity.getPrice());
-        //rv.setProductDetails(entity.getProductDetails());
-        rv.setCategory(categoryConverter.fromEntity(entity.getCategory()));
+        rv.setProductDetails(setToProductDetailEntityMap(entity.getProductDetailsElements()));
+        rv.setCategory(categoryConverter.fromEntity(entity.getCategoryEntity()));
         return rv;
     }
 
@@ -28,8 +34,27 @@ public class ProductConverter {
         rv.setImage(boundary.getImage());
         rv.setName(boundary.getName());
         rv.setPrice(boundary.getPrice());
-        rv.setCategory(categoryConverter.toEntity(boundary.getCategory()));
-        //rv.setProductDetails(boundary.getProductDetails());
+        rv.setCategoryEntity(categoryConverter.toEntity(boundary.getCategory()));
+        rv.setProductDetailsElements(mapToProductDetailEntitySet(boundary.getProductDetails()));
         return rv;
+    }
+
+    public Set<ProductDetailEntity> mapToProductDetailEntitySet(Map<String,Object> productDetails) {
+        Set<ProductDetailEntity> productDetailsEntitySet = new HashSet<>();
+
+        for (Map.Entry<String,Object> entry : productDetails.entrySet()){
+            productDetailsEntitySet.add(new ProductDetailEntity(entry.getKey(),entry.getValue()));
+        }
+        return productDetailsEntitySet;
+    }
+
+    public Map<String,Object> setToProductDetailEntityMap(Set<ProductDetailEntity> productDetails) {
+        Map<String,Object> productDetailsEntityMap = new HashMap<>();
+
+        for (ProductDetailEntity productDetailEntity : productDetails) {
+            productDetailsEntityMap.put(productDetailEntity.getKey(), productDetailEntity.getValue());
+        }
+
+        return productDetailsEntityMap;
     }
 }

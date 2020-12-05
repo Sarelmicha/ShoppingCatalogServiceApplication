@@ -5,15 +5,17 @@ public class CategoryBoundary {
 
 	private String name;
 	private String description;
+	private String parentCategory;
 
 
 	public CategoryBoundary() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CategoryBoundary(String name, String description) {
+	public CategoryBoundary(String name, String description, String parentCategory) {
 		this.name = name;
 		this.description = description;
+		this.parentCategory = parentCategory;
 	}
 
 	public String getName() {
@@ -30,5 +32,13 @@ public class CategoryBoundary {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getParentCategory() {
+		return parentCategory;
+	}
+
+	public void setParentCategory(String parentCategory) {
+		this.parentCategory = parentCategory;
 	}
 }
