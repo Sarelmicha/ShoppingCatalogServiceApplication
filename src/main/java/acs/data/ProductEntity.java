@@ -3,9 +3,12 @@ import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
@@ -21,20 +24,20 @@ public class ProductEntity {
     private String image;
 
 //    @Convert(acs.logic.utils.MapToJsonConverter.class)
-    private Map<String, Object> productDetails;
+  @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductDetailEntity> productDetailsElements;
 
     private CategoryEntity category;
 
     public ProductEntity() {
-        this.productDetails = new HashMap<>();
+        this.productDetailsElements = new HashSet<>();
     }
 
-    public ProductEntity(Long id, String name, Float price, String image, Map<String, Object> productDetails) {
+    public ProductEntity(Long id, String name, Float price, String image,  Set<ProductDetailEntity> productDetailsElements) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
-        this.productDetails = productDetails;
+        this.productDetailsElements = productDetailsElements;
 
     }
 
@@ -69,12 +72,12 @@ public class ProductEntity {
         this.image = image;
     }
 
-    public Map<String, Object> getProductDetails() {
-        return productDetails;
+    public Set<ProductDetailEntity> getProductDetailsElements() {
+        return productDetailsElements;
     }
 
-    public void setProductDetails(Map<String, Object> productDetails) {
-        this.productDetails = productDetails;
+    public void setProductDetailsElements(Set<ProductDetailEntity> productDetailsElements) {
+        this.productDetailsElements = productDetailsElements;
     }
 
     public CategoryEntity getCategory() {
