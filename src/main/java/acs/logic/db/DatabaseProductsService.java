@@ -14,9 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,9 +46,11 @@ public class DatabaseProductsService implements ProductsService {
             throw  new RuntimeException("Category for product doesn't exist");
         }
         productEntity.setCategoryEntity(categoryInDB);
-        System.out.println(categoryInDB);
+        categoryInDB.getProductEntitySet().add(productEntity);
+
+        this.categoryDao.save(categoryInDB);
         this.productDao.save(productEntity);
-//        this.categoryDao.save(categoryInDB);
+
         return this.converter.fromEntity(productEntity);
     }
 
@@ -79,11 +79,31 @@ public class DatabaseProductsService implements ProductsService {
                         PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
+            else if (filterType.equals(FilterType.CATEGORY.toString())) {
+                 CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
+                 Set<ProductEntity> set = new HashSet<>();
+                 findAllProducts(categoryEntity, set);
+                 return set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());
+            }
+
         }
 
         return this.productDao.findAll(
                 PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy)).getContent()
                 .stream().map(this.converter::fromEntity).collect(Collectors.toList());
+    }
+
+
+    public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
+//        if(categoryEntity.getCategoryEntitySet().isEmpty()){
+//            return;
+//        }
+        for(ProductEntity productEntity: categoryEntity.getProductEntitySet()){
+            productEntitySet.add(productEntity);
+        }
+        for(CategoryEntity category: categoryEntity.getCategoryEntitySet()){
+            findAllProducts(category, productEntitySet);
+        }
     }
 
 }

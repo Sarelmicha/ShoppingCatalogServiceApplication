@@ -17,8 +17,12 @@ public class CategoryEntity {
     private String description ;    // FIRST VARCHAR(255)
 
     @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
+    @Relationship(type = "categoryChildren", direction = Relationship.Direction.OUTGOING) private Set<CategoryEntity> categoryEntitySet;
+    @Relationship(type = "productsChildren", direction = Relationship.Direction.OUTGOING) private Set<ProductEntity> productEntitySet;
 
     public CategoryEntity() {
+        this.categoryEntitySet = new HashSet<>();
+        this.productEntitySet = new HashSet<>();
     }
 
     public CategoryEntity(String name, String description, CategoryEntity parentCategory) {
@@ -50,5 +54,21 @@ public class CategoryEntity {
 
     public void setParentCategory(CategoryEntity parentCategory) {
         this.parentCategory = parentCategory;
+    }
+
+    public Set<CategoryEntity> getCategoryEntitySet() {
+        return categoryEntitySet;
+    }
+
+    public void setCategoryEntitySet(Set<CategoryEntity> categoryEntitySet) {
+        this.categoryEntitySet = categoryEntitySet;
+    }
+
+    public Set<ProductEntity> getProductEntitySet() {
+        return productEntitySet;
+    }
+
+    public void setProductEntitySet(Set<ProductEntity> productEntitySet) {
+        this.productEntitySet = productEntitySet;
     }
 }

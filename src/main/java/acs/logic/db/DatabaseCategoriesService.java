@@ -42,6 +42,7 @@ public class DatabaseCategoriesService implements EnhancedCategoriesService {
 				throw new NotFoundException("parent category does not exists.");
 			}
 			categoryEntity.setParentCategory(categoryParent);
+			categoryParent.getCategoryEntitySet().add(categoryEntity);
 		}
 		categoryEntity = this.categoryDao.save(categoryEntity);
 		return this.converter.fromEntity(categoryEntity);
