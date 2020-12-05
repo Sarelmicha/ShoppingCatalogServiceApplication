@@ -25,10 +25,7 @@ public class ProductEntity {
 
 //    @Convert(acs.logic.utils.MapToJsonConverter.class)
     @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductDetailEntity> productDetailsElements;
-
     @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity categoryEntity;
-
-
 
     public ProductEntity() {
         this.productDetailsElements = new HashSet<>();

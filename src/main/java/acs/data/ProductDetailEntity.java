@@ -7,9 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 @Node(labels = "PRODUCT_DETAIL")
 public class ProductDetailEntity {
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
 
     private String key;
     //    @NotEmpty(message="Description can not be empty")
