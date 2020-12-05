@@ -32,15 +32,11 @@ public class DatabaseProductsService implements ProductsService {
         this.categoryDao = categoryDao;
     }
 
-
     // TODO check with eyal
     @Override
-    @Transactional
+//    @Transactional
     public ProductBoundary createProduct(ProductBoundary productBoundary) {
-//        ProductEntity product = this.productDao.findById(uuid).
-//        if(product != null){
-//            throw new AlreadyExistsException("This product already exists");
-//        }
+
         ProductEntity productEntity = this.converter.toEntity(productBoundary);
         Optional<ProductEntity> productInDB = this.productDao.findById(productEntity.getId());
 
@@ -48,7 +44,7 @@ public class DatabaseProductsService implements ProductsService {
             throw new RuntimeException("Product with categorical number " + productEntity.getId() + " already exist");
         }
         CategoryEntity categoryInDB = this.categoryDao.findOneByName(productBoundary.getCategory().getName());
-        if(categoryInDB==null){
+        if(categoryInDB == null){
             throw  new RuntimeException("Category for product doesn't exist");
         }
 

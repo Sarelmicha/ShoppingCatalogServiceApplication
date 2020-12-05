@@ -1,6 +1,4 @@
 package acs.data;
-
-
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -11,7 +9,7 @@ import java.util.Map;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-    @Id private Long id;
+    @Id @GeneratedValue private Long id;
 
     //    @NotEmpty(message="Name can not be empty")
     private String name;
@@ -22,32 +20,31 @@ public class ProductEntity {
     //    @NotEmpty(message="Image can not be empty")
     private String image;
 
-   // @Convert(acs.logic.utils.MapToJsonConverter.class)
-   // private Map<String, Object> productDetails;
+//    @Convert(acs.logic.utils.MapToJsonConverter.class)
+    private Map<String, Object> productDetails;
 
     private CategoryEntity category;
 
     public ProductEntity() {
-        //this.productDetails = new HashMap<>();
+        this.productDetails = new HashMap<>();
     }
 
-    public ProductEntity(long id, String name, Float price, String image, Map<String, Object> productDetails) {
+    public ProductEntity(Long id, String name, Float price, String image, Map<String, Object> productDetails) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
-        //this.productDetails = productDetails;
+        this.productDetails = productDetails;
 
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -72,14 +69,13 @@ public class ProductEntity {
         this.image = image;
     }
 
-   /* public Map<String, Object> getProductDetails() {
+    public Map<String, Object> getProductDetails() {
         return productDetails;
     }
 
     public void setProductDetails(Map<String, Object> productDetails) {
         this.productDetails = productDetails;
     }
-*/
 
     public CategoryEntity getCategory() {
         return category;

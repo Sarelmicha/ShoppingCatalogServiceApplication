@@ -15,8 +15,8 @@ public class CategoryEntity {
     private String name;        // EMAIL PK VARCHAR(255)
 //    @NotEmpty(message="Description can not be empty")
     private String description ;    // FIRST VARCHAR(255)
-    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductEntity> productsElements;
 
+    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductEntity> productsElements;
     public CategoryEntity() {
         this.productsElements = new HashSet<>();
     }
