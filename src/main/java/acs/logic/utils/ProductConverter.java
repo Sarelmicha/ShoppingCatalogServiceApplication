@@ -1,4 +1,5 @@
 package acs.logic.utils;
+
 import acs.boundary.ProductBoundary;
 import acs.data.ProductDetailEntity;
 import acs.data.ProductEntity;
@@ -23,7 +24,7 @@ public class ProductConverter {
         rv.setImage(entity.getImage());
         rv.setName(entity.getName());
         rv.setPrice(entity.getPrice());
-        rv.setProductDetails(entity.getProductDetails());
+        rv.setProductDetails(this.setToProductDetailEntityMap(entity.getProductDetails()));
         rv.setCategory(categoryConverter.fromEntity(entity.getCategoryEntity()));
         return rv;
     }
@@ -39,22 +40,33 @@ public class ProductConverter {
         return rv;
     }
 
-    public Set<ProductDetailEntity> mapToProductDetailEntitySet(Map<String,Object> productDetails) {
-        Set<ProductDetailEntity> productDetailsEntitySet = new HashSet<>();
+//    public Set<ProductDetailEntity> mapToProductDetailEntitySet(Map<String, Object> productDetails) {
+//        Set<ProductDetailEntity> productDetailsEntitySet = new HashSet<>();
+//
+//        for (Map.Entry<String, Object> entry : productDetails.entrySet()) {
+//            productDetailsEntitySet.add(new ProductDetailEntity(entry.getKey(), entry.getValue()));
+//        }
+//        return productDetailsEntitySet;
+//    }
 
-        for (Map.Entry<String,Object> entry : productDetails.entrySet()){
-            productDetailsEntitySet.add(new ProductDetailEntity(entry.getKey(),entry.getValue()));
+    public Map<String, Object> setToProductDetailEntityMap(Map<String, Object>  entityProductDetails) {
+        Map<String, Object> temp = new HashMap<>();
+        for (String key : entityProductDetails.keySet()) {
+            Class myClass = entityProductDetails.get(key).getClass();
+            if (myClass == Integer.class) {
+                int t = (int) entityProductDetails.get(key);
+                temp.put(key, t);
+            } else if (myClass == Boolean.class) {
+                boolean t = (boolean) entityProductDetails.get(key);
+                temp.put(key, t);
+            } else if (myClass == Float.class) {
+                float t = (float) entityProductDetails.get(key);
+                temp.put(key, t);
+            } else {
+                String t = entityProductDetails.get(key).toString().trim();
+                temp.put(key, t);
+            }
         }
-        return productDetailsEntitySet;
-    }
-
-    public Map<String,Object> setToProductDetailEntityMap(Set<ProductDetailEntity> productDetails) {
-        Map<String,Object> productDetailsEntityMap = new HashMap<>();
-
-        for (ProductDetailEntity productDetailEntity : productDetails) {
-            productDetailsEntityMap.put(productDetailEntity.getKey(), productDetailEntity.getValue());
-        }
-
-        return productDetailsEntityMap;
+        return temp;
     }
 }
