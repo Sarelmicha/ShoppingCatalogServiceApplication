@@ -94,6 +94,12 @@ public class DatabaseProductsService implements ProductsService {
                 .stream().map(this.converter::fromEntity).collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public void deleteAllProducts() {
+        this.productDao.deleteAll();
+    }
+
 
   /*  public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
 //        if(categoryEntity.getCategoryEntitySet().isEmpty()){

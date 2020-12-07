@@ -9,6 +9,8 @@ public interface ProductsService {
 
     ProductBoundary getProduct(String productId);
 
+    void deleteAllProducts();
+
     List<ProductBoundary> getAllProducts(String filterType, String filterValue, String sortBy, String sortOrder, int page, int size);
 
     //List<ProductBoundary> getAllProductsByCriteria(String criteriaType, String criteriaValue,
