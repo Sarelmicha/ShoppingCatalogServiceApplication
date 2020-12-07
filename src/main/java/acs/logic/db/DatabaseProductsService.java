@@ -80,11 +80,12 @@ public class DatabaseProductsService implements ProductsService {
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
             else if (filterType.equals(FilterType.CATEGORY.toString())) {
-                 CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
+/*                 CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
                  Set<ProductEntity> set = new HashSet<>();
                  findAllProducts(categoryEntity, set);
-                 List<ProductBoundary> allProducts = set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());
-                 return allProducts;
+                 List<ProductBoundary> allProducts = set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());*/
+                 return productDao.findAllByParentCategory_Name(filterValue, PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
+                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
         }
 
@@ -94,7 +95,7 @@ public class DatabaseProductsService implements ProductsService {
     }
 
 
-    public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
+  /*  public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
 //        if(categoryEntity.getCategoryEntitySet().isEmpty()){
 //            return;
 //        }
@@ -105,5 +106,5 @@ public class DatabaseProductsService implements ProductsService {
             findAllProducts(category, productEntitySet);
         }
     }
-
+*/
 }

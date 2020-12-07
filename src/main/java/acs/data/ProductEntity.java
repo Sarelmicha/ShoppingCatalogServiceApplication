@@ -1,15 +1,14 @@
 package acs.data;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-    @Id @GeneratedValue private Long id;
+    @Id private Long id;
 
     //    @NotEmpty(message="Name can not be empty")
     private String name;
@@ -21,19 +20,19 @@ public class ProductEntity {
     private String image;
 
 //    @Convert(acs.logic.utils.MapToJsonConverter.class)
-    @Relationship(type = "belongs", direction = Relationship.Direction.OUTGOING) private Set<ProductDetailEntity> productDetails;
-    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity categoryEntity;
+    @CompositeProperty
+    private Map<String, Object> productDetails;
+    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
 
     public ProductEntity() {
-        this.productDetails = new HashSet<>();
+        this.productDetails = new HashMap<>();
     }
 
-    public ProductEntity(String name, Float price, String image,  Set<ProductDetailEntity> productDetailsElements) {
+    public ProductEntity(String name, Float price, String image,  Map<String, Object> productDetailsElements) {
         this.name = name;
         this.price = price;
         this.image = image;
         this.productDetails = productDetailsElements;
-
     }
 
     public Long getId() {
@@ -68,18 +67,18 @@ public class ProductEntity {
     }
 
     public CategoryEntity getCategoryEntity() {
-        return categoryEntity;
+        return parentCategory;
     }
 
-    public void setCategoryEntity(CategoryEntity categoryEntity) {
-        this.categoryEntity = categoryEntity;
+    public void setCategoryEntity(CategoryEntity category) {
+        this.parentCategory = category;
     }
 
-    public Set<ProductDetailEntity> getProductDetails() {
+    public Map<String, Object> getProductDetails() {
         return productDetails;
     }
 
-    public void setProductDetails(Set<ProductDetailEntity> productDetails) {
+    public void setProductDetails(Map<String, Object> productDetails) {
         this.productDetails = productDetails;
     }
 
