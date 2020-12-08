@@ -1,9 +1,9 @@
 package acs.data;
+import acs.exceptions.BadRequestException;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,10 +11,8 @@ import java.util.Set;
 public class CategoryEntity {
 
     @Id @GeneratedValue private Long id;
-
-    private String name;        // EMAIL PK VARCHAR(255)
-//    @NotEmpty(message="Description can not be empty")
-    private String description ;    // FIRST VARCHAR(255)
+    private String name;
+    private String description ;
 
     @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
     @Relationship(type = "categoryChildren", direction = Relationship.Direction.OUTGOING) private Set<CategoryEntity> categoryEntitySet;
@@ -37,6 +35,9 @@ public class CategoryEntity {
     }
 
     public void setName(String name) {
+        if(name == null || name.isEmpty()) {
+            throw new BadRequestException("Name of category can not be empty or null");
+        }
         this.name = name;
     }
 

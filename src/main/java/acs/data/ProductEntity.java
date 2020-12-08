@@ -1,27 +1,24 @@
 package acs.data;
+import acs.exceptions.BadRequestException;
+import org.neo4j.driver.internal.shaded.reactor.util.annotation.NonNull;
+import org.neo4j.driver.internal.shaded.reactor.util.annotation.Nullable;
 import org.springframework.data.neo4j.core.schema.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-    @Id private Long id;
 
-    //    @NotEmpty(message="Name can not be empty")
+    @Id private String id;
     private String name;
-
-    //    @NotEmpty(message="Price can not be empty")
     private Float price;
-
-    //    @NotEmpty(message="Image can not be empty")
     private String image;
 
-//    @Convert(acs.logic.utils.MapToJsonConverter.class)
-    @CompositeProperty
-    private Map<String, Object> productDetails;
+    @CompositeProperty private Map<String, Object> productDetails;
+
     @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
 
     public ProductEntity() {
@@ -35,11 +32,11 @@ public class ProductEntity {
         this.productDetails = productDetailsElements;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getName() {
@@ -47,6 +44,9 @@ public class ProductEntity {
     }
 
     public void setName(String name) {
+        if(name == null || name.isEmpty()){
+            throw new BadRequestException("Name of product can not be empty or null");
+        }
         this.name = name;
     }
 
@@ -55,6 +55,12 @@ public class ProductEntity {
     }
 
     public void setPrice(Float price) {
+        if(price == null){
+            throw new BadRequestException("Price can not be null.");
+        }
+        if(price < 0){
+            throw new BadRequestException("Price can not be negative.");
+        }
         this.price = price;
     }
 

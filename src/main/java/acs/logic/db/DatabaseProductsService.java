@@ -6,7 +6,7 @@ import acs.data.CategoryEntity;
 import acs.data.ProductEntity;
 import acs.exceptions.AlreadyExistsException;
 import acs.exceptions.NotFoundException;
-import acs.logic.ProductsService;
+import acs.logic.EnhancedProductService;
 import acs.logic.utils.FilterType;
 import acs.logic.utils.ProductConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DatabaseProductsService implements ProductsService {
+public class DatabaseProductsService implements EnhancedProductService {
     private final ProductDao productDao; // Data access object
     private final ProductConverter converter;
     private final CategoryDao categoryDao;
@@ -56,7 +55,7 @@ public class DatabaseProductsService implements ProductsService {
 
     @Override
     public ProductBoundary getProduct(String productId) {
-        ProductBoundary pb = this.converter.fromEntity(this.productDao.findById(Long.parseLong(productId)).
+        ProductBoundary pb = this.converter.fromEntity(this.productDao.findById(productId).
                 orElseThrow(()-> new NotFoundException("Product does not exists")));
 //        ProductConverter.printMap(pb.getProductDetails());
         return pb;
@@ -76,21 +75,20 @@ public class DatabaseProductsService implements ProductsService {
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             } else if (filterType.equals(FilterType.MIN_PRICE.toString())) {
                 return this.productDao
-                        .findAllByPriceGreaterThan(Float.parseFloat(filterValue),
+                        .findAllByPriceGreaterThanEqual(Float.parseFloat(filterValue),
                                 PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             } else if (filterType.equals(FilterType.MAX_PRICE.toString())) {
-                return productDao.findAllByPriceLessThan(Float.parseFloat(filterValue),
+                return productDao.findAllByPriceLessThanEqual(Float.parseFloat(filterValue),
                         PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
             else if (filterType.equals(FilterType.CATEGORY.toString())) {
-/*                 CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
+                 CategoryEntity categoryEntity = categoryDao.findOneByName(filterValue);
                  Set<ProductEntity> set = new HashSet<>();
                  findAllProducts(categoryEntity, set);
-                 List<ProductBoundary> allProducts = set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());*/
-                 return productDao.findAllByParentCategory_Name(filterValue, PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
-                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
+                 List<ProductBoundary> allProducts = set.stream().map((value) -> this.converter.fromEntity(value)).collect(Collectors.toList());
+                 return allProducts;
             }
         }
 
@@ -106,10 +104,8 @@ public class DatabaseProductsService implements ProductsService {
     }
 
 
-  /*  public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
-//        if(categoryEntity.getCategoryEntitySet().isEmpty()){
-//            return;
-//        }
+    public void findAllProducts(CategoryEntity categoryEntity, Set<ProductEntity> productEntitySet){
+
         for(ProductEntity productEntity: categoryEntity.getProductEntitySet()){
             productEntitySet.add(productEntity);
         }
@@ -117,5 +113,5 @@ public class DatabaseProductsService implements ProductsService {
             findAllProducts(category, productEntitySet);
         }
     }
-*/
+
 }

@@ -26,7 +26,7 @@ public class ProductConverter {
 
     public ProductBoundary fromEntity(ProductEntity entity) {
         ProductBoundary rv = new ProductBoundary();
-        rv.setId(entity.getId() + "");
+        rv.setId(entity.getId());
         rv.setImage(entity.getImage());
         rv.setName(entity.getName());
         rv.setPrice(entity.getPrice());
@@ -43,7 +43,7 @@ public class ProductConverter {
 
     public ProductEntity toEntity(ProductBoundary boundary) {
         ProductEntity rv = new ProductEntity();
-        rv.setId(Long.parseLong(boundary.getId()));
+        rv.setId(boundary.getId());
         rv.setImage(boundary.getImage());
         rv.setName(boundary.getName());
         rv.setPrice(boundary.getPrice());

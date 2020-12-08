@@ -66,10 +66,9 @@ public class DatabaseCategoriesService implements EnhancedCategoriesService {
 //	}
 
 
-
 	@Override
 	@Transactional
-	public void deleteAllShopping() {
+	public void deleteAllCategories() {
 		this.categoryDao.deleteAll();
 	}
 

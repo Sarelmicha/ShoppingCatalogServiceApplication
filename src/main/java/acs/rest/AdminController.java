@@ -1,7 +1,7 @@
 package acs.rest;
 
 import acs.logic.EnhancedCategoriesService;
-import acs.logic.ProductsService;
+import acs.logic.EnhancedProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 	
 	private EnhancedCategoriesService enhancedCategoriesService;
-	private ProductsService productService;
+	private EnhancedProductService enhancedProductService;
 	
 	@Autowired
-	public AdminController(EnhancedCategoriesService enhancedCategoriesService, ProductsService productService) {
+	public AdminController(EnhancedCategoriesService enhancedCategoriesService, EnhancedProductService enhancedProductService) {
 		this.enhancedCategoriesService = enhancedCategoriesService;
-		this.productService = productService;
+		this.enhancedProductService = enhancedProductService;
 	}
 	
 	/*--------------------- DELETE APIS ------------------- */
@@ -24,8 +24,8 @@ public class AdminController {
 	@RequestMapping(path = "/shopping",
 			method = RequestMethod.DELETE)
 	public void deleteAllShopping() {
-		this.productService.deleteAllProducts();
-		this.enhancedCategoriesService.deleteAllShopping();
+		this.enhancedProductService.deleteAllProducts();
+		this.enhancedCategoriesService.deleteAllCategories();
 	}
 
 }
