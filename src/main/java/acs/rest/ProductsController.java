@@ -19,7 +19,8 @@ public class ProductsController {
     // Get product
 	@RequestMapping(path = "/shopping/products/{productId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ProductBoundary getProduct(@PathVariable("productId") String productId) {
-		return productsService.getProduct(productId);
+        ProductBoundary pb = productsService.getProduct(productId);
+		return pb;
 	}
 
     @RequestMapping(path = "/shopping/products", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

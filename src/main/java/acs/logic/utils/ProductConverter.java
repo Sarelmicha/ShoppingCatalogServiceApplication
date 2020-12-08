@@ -3,6 +3,12 @@ package acs.logic.utils;
 import acs.boundary.ProductBoundary;
 import acs.data.ProductDetailEntity;
 import acs.data.ProductEntity;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.internal.types.InternalMapAccessorWithDefaultValue;
+import org.neo4j.driver.internal.value.BooleanValue;
+import org.neo4j.driver.internal.value.FloatValue;
+import org.neo4j.driver.internal.value.IntegerValue;
+import org.neo4j.driver.internal.value.ValueAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -24,7 +30,13 @@ public class ProductConverter {
         rv.setImage(entity.getImage());
         rv.setName(entity.getName());
         rv.setPrice(entity.getPrice());
-        rv.setProductDetails(this.setToProductDetailEntityMap(entity.getProductDetails()));
+        try{
+            rv.setProductDetails(this.setToProductDetailEntityMap(entity.getProductDetails()));
+        }
+        catch(ClassCastException e){
+            System.out.println("error------------------------\n" + e);
+            rv.setProductDetails(entity.getProductDetails());
+        }
         rv.setCategory(categoryConverter.fromEntity(entity.getCategoryEntity()));
         return rv;
     }
@@ -40,32 +52,11 @@ public class ProductConverter {
         return rv;
     }
 
-//    public Set<ProductDetailEntity> mapToProductDetailEntitySet(Map<String, Object> productDetails) {
-//        Set<ProductDetailEntity> productDetailsEntitySet = new HashSet<>();
-//
-//        for (Map.Entry<String, Object> entry : productDetails.entrySet()) {
-//            productDetailsEntitySet.add(new ProductDetailEntity(entry.getKey(), entry.getValue()));
-//        }
-//        return productDetailsEntitySet;
-//    }
 
     public Map<String, Object> setToProductDetailEntityMap(Map<String, Object>  entityProductDetails) {
         Map<String, Object> temp = new HashMap<>();
         for (String key : entityProductDetails.keySet()) {
-            Class myClass = entityProductDetails.get(key).getClass();
-            if (myClass == Integer.class) {
-                int t = (int) entityProductDetails.get(key);
-                temp.put(key, t);
-            } else if (myClass == Boolean.class) {
-                boolean t = (boolean) entityProductDetails.get(key);
-                temp.put(key, t);
-            } else if (myClass == Float.class) {
-                float t = (float) entityProductDetails.get(key);
-                temp.put(key, t);
-            } else {
-                String t = entityProductDetails.get(key).toString().trim();
-                temp.put(key, t);
-            }
+            temp.put(key, ((Value)(entityProductDetails.get(key))).asObject());
         }
         return temp;
     }

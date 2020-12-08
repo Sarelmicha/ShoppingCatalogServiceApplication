@@ -4,6 +4,7 @@ import acs.dao.CategoryDao;
 import acs.dao.ProductDao;
 import acs.data.CategoryEntity;
 import acs.data.ProductEntity;
+import acs.exceptions.AlreadyExistsException;
 import acs.exceptions.NotFoundException;
 import acs.logic.ProductsService;
 import acs.logic.utils.FilterType;
@@ -38,7 +39,7 @@ public class DatabaseProductsService implements ProductsService {
         Optional<ProductEntity> productInDB = this.productDao.findById(productEntity.getId());
 
         if(productInDB.isPresent()){
-            throw new RuntimeException("Product with categorical number " + productEntity.getId() + " already exist");
+            throw new AlreadyExistsException("Product with categorical number " + productEntity.getId() + " already exist");
         }
         CategoryEntity categoryInDB = this.categoryDao.findOneByName(productBoundary.getCategory().getName());
         if(categoryInDB == null){
@@ -55,8 +56,12 @@ public class DatabaseProductsService implements ProductsService {
 
     @Override
     public ProductBoundary getProduct(String productId) {
-        return this.converter.fromEntity(this.productDao.findById(Long.parseLong(productId)).
+        ProductBoundary pb = this.converter.fromEntity(this.productDao.findById(Long.parseLong(productId)).
                 orElseThrow(()-> new NotFoundException("Product does not exists")));
+//        ProductConverter.printMap(pb.getProductDetails());
+        return pb;
+//        return this.converter.fromEntity(this.productDao.findById(Long.parseLong(productId)).
+//                orElseThrow(()-> new NotFoundException("Product does not exists")));
     }
 
     @Override

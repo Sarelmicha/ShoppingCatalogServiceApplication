@@ -71,4 +71,5 @@ public class ProductBoundary {
     public void setCategory(CategoryBoundary category) {
         this.category = category;
     }
+
 }
