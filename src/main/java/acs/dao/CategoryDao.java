@@ -7,10 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryDao extends PagingAndSortingRepository<CategoryEntity, Long> {
-//    List<CategoryEntity> findAllByLastNameLikeIgnoreCase(@Param("lastName") String lastName, Pageable pageable);
-//
-//    List<CategoryEntity> findAllByAgeGreaterThan(@Param("age") int age, Pageable pageable);
-//
     CategoryEntity findOneByName(@Param("name") String name);
-
 }

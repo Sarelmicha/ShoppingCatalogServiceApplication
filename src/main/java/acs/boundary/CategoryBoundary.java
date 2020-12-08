@@ -9,7 +9,6 @@ public class CategoryBoundary {
 
 
 	public CategoryBoundary() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public CategoryBoundary(String name, String description, String parentCategory) {

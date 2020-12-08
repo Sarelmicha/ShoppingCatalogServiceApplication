@@ -1,20 +1,12 @@
 package acs.logic.utils;
 
 import acs.boundary.ProductBoundary;
-import acs.data.ProductDetailEntity;
 import acs.data.ProductEntity;
 import org.neo4j.driver.Value;
-import org.neo4j.driver.internal.types.InternalMapAccessorWithDefaultValue;
-import org.neo4j.driver.internal.value.BooleanValue;
-import org.neo4j.driver.internal.value.FloatValue;
-import org.neo4j.driver.internal.value.IntegerValue;
-import org.neo4j.driver.internal.value.ValueAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Component
 public class ProductConverter {
@@ -34,7 +26,6 @@ public class ProductConverter {
             rv.setProductDetails(this.setToProductDetailEntityMap(entity.getProductDetails()));
         }
         catch(ClassCastException e){
-            System.out.println("error------------------------\n" + e);
             rv.setProductDetails(entity.getProductDetails());
         }
         rv.setCategory(categoryConverter.fromEntity(entity.getCategoryEntity()));
