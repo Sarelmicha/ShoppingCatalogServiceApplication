@@ -1,9 +1,9 @@
 package acs.data;
+import acs.exceptions.BadRequestException;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,20 +11,23 @@ import java.util.Set;
 public class CategoryEntity {
 
     @Id @GeneratedValue private Long id;
+    private String name;
+    private String description ;
 
-    private String name;        // EMAIL PK VARCHAR(255)
-//    @NotEmpty(message="Description can not be empty")
-    private String description ;    // FIRST VARCHAR(255)
+    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
+    @Relationship(type = "categoryChildren", direction = Relationship.Direction.OUTGOING) private Set<CategoryEntity> categoryEntitySet;
+    @Relationship(type = "productsChildren", direction = Relationship.Direction.OUTGOING) private Set<ProductEntity> productEntitySet;
 
-    @Relationship(type = "belongs", direction = Relationship.Direction.INCOMING) private Set<ProductEntity> productsElements;
     public CategoryEntity() {
-        this.productsElements = new HashSet<>();
+        this.categoryEntitySet = new HashSet<>();
+        this.productEntitySet = new HashSet<>();
     }
 
-    public CategoryEntity(String name, String description) {
+    public CategoryEntity(String name, String description, CategoryEntity parentCategory) {
         super();
         this.name = name;
         this.description = description;
+        this.parentCategory = parentCategory;
     }
 
     public String getName() {
@@ -32,6 +35,9 @@ public class CategoryEntity {
     }
 
     public void setName(String name) {
+        if(name == null || name.isEmpty()) {
+            throw new BadRequestException("Name of category can not be empty or null");
+        }
         this.name = name;
     }
 
@@ -43,16 +49,35 @@ public class CategoryEntity {
         this.description = description;
     }
 
-    public Set<ProductEntity> getProductsElements() {
-        return productsElements;
+    public CategoryEntity getParentCategory() {
+        return parentCategory;
     }
 
-    public void setProductsElements(Set<ProductEntity> productsElements) {
-        this.productsElements = productsElements;
+    public void setParentCategory(CategoryEntity parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
-    public void addProductElement(ProductEntity product) {
-        this.productsElements.add(product);
+    public Set<CategoryEntity> getCategoryEntitySet() {
+        return categoryEntitySet;
     }
 
+    public void setCategoryEntitySet(Set<CategoryEntity> categoryEntitySet) {
+        this.categoryEntitySet = categoryEntitySet;
+    }
+
+    public Set<ProductEntity> getProductEntitySet() {
+        return productEntitySet;
+    }
+
+    public void setProductEntitySet(Set<ProductEntity> productEntitySet) {
+        this.productEntitySet = productEntitySet;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -12,7 +12,9 @@ public class CategoryConverter {
 		CategoryBoundary rv = new CategoryBoundary();
 		rv.setName(entity.getName());
 		rv.setDescription(entity.getDescription());
-
+		if(entity.getParentCategory() != null) {
+			rv.setParentCategory(entity.getParentCategory().getName());
+		}
 		return rv;
 	}
 

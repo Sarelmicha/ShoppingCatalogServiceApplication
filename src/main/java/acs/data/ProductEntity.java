@@ -1,48 +1,42 @@
 package acs.data;
-import org.neo4j.ogm.annotation.typeconversion.Convert;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
+import acs.exceptions.BadRequestException;
+import org.neo4j.driver.internal.shaded.reactor.util.annotation.NonNull;
+import org.neo4j.driver.internal.shaded.reactor.util.annotation.Nullable;
+import org.springframework.data.neo4j.core.schema.*;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
 @Node(labels="PRODUCT")
 public class ProductEntity {
-    @Id @GeneratedValue private Long id;
 
-    //    @NotEmpty(message="Name can not be empty")
+    @Id private String id;
     private String name;
-
-    //    @NotEmpty(message="Price can not be empty")
     private Float price;
-
-    //    @NotEmpty(message="Image can not be empty")
     private String image;
 
-//    @Convert(acs.logic.utils.MapToJsonConverter.class)
-    private Map<String, Object> productDetails;
+    @CompositeProperty private Map<String, Object> productDetails;
 
-    private CategoryEntity category;
+    @Relationship(type = "belongsToCategory", direction = Relationship.Direction.OUTGOING) private CategoryEntity parentCategory;
 
     public ProductEntity() {
         this.productDetails = new HashMap<>();
     }
 
-    public ProductEntity(Long id, String name, Float price, String image, Map<String, Object> productDetails) {
-        this.id = id;
+    public ProductEntity(String name, Float price, String image,  Map<String, Object> productDetailsElements) {
         this.name = name;
         this.price = price;
         this.image = image;
-        this.productDetails = productDetails;
-
+        this.productDetails = productDetailsElements;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getName() {
@@ -50,6 +44,9 @@ public class ProductEntity {
     }
 
     public void setName(String name) {
+        if(name == null || name.isEmpty()){
+            throw new BadRequestException("Name of product can not be empty or null");
+        }
         this.name = name;
     }
 
@@ -58,6 +55,12 @@ public class ProductEntity {
     }
 
     public void setPrice(Float price) {
+        if(price == null){
+            throw new BadRequestException("Price can not be null.");
+        }
+        if(price < 0){
+            throw new BadRequestException("Price can not be negative.");
+        }
         this.price = price;
     }
 
@@ -69,6 +72,14 @@ public class ProductEntity {
         this.image = image;
     }
 
+    public CategoryEntity getCategoryEntity() {
+        return parentCategory;
+    }
+
+    public void setCategoryEntity(CategoryEntity category) {
+        this.parentCategory = category;
+    }
+
     public Map<String, Object> getProductDetails() {
         return productDetails;
     }
@@ -77,11 +88,4 @@ public class ProductEntity {
         this.productDetails = productDetails;
     }
 
-    public CategoryEntity getCategory() {
-        return category;
-    }
-
-    public void setCategory(CategoryEntity category) {
-        this.category = category;
-    }
 }

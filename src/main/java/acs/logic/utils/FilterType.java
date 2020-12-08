@@ -1,7 +1,7 @@
 package acs.logic.utils;
 
 public enum FilterType {
-    NAME("byName"), MIN_PRICE("byMinPrice"), MAX_PRICE("byMaxPrice");
+    NAME("byName"), MIN_PRICE("byMinPrice"), MAX_PRICE("byMaxPrice"), CATEGORY("byCategory");
 
     private final String filter;
 
