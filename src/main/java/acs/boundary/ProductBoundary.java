@@ -6,7 +6,7 @@ public class ProductBoundary {
 
     private String id;
     private String name;
-    private Float price;
+    private Double price;
     private String image;
     private Map<String, Object> productDetails;
     private CategoryBoundary category;
@@ -14,7 +14,7 @@ public class ProductBoundary {
     public ProductBoundary() {
     }
 
-    public ProductBoundary(String id, String name, Float price, String image, Map<String, Object> productDetails
+    public ProductBoundary(String id, String name, Double price, String image, Map<String, Object> productDetails
             ,CategoryBoundary category) {
         this.id = id;
         this.name = name;
@@ -40,11 +40,11 @@ public class ProductBoundary {
         this.name = name;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

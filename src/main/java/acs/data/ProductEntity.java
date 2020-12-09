@@ -14,7 +14,7 @@ public class ProductEntity {
 
     @Id private String id;
     private String name;
-    private Float price;
+    private Double price;
     private String image;
 
     @CompositeProperty private Map<String, Object> productDetails;
@@ -25,7 +25,7 @@ public class ProductEntity {
         this.productDetails = new HashMap<>();
     }
 
-    public ProductEntity(String name, Float price, String image,  Map<String, Object> productDetailsElements) {
+    public ProductEntity(String name, Double price, String image,  Map<String, Object> productDetailsElements) {
         this.name = name;
         this.price = price;
         this.image = image;
@@ -50,11 +50,11 @@ public class ProductEntity {
         this.name = name;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         if(price == null){
             throw new BadRequestException("Price can not be null.");
         }

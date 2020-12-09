@@ -75,11 +75,11 @@ public class DatabaseProductsService implements EnhancedProductService {
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             } else if (filterType.equals(FilterType.MIN_PRICE.toString())) {
                 return this.productDao
-                        .findAllByPriceGreaterThanEqual(Float.parseFloat(filterValue),
+                        .findAllByPriceGreaterThanEqual(Double.parseDouble(filterValue),
                                 PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             } else if (filterType.equals(FilterType.MAX_PRICE.toString())) {
-                return productDao.findAllByPriceLessThanEqual(Float.parseFloat(filterValue),
+                return productDao.findAllByPriceLessThanEqual(Double.parseDouble(filterValue),
                         PageRequest.of(page, size, Sort.Direction.valueOf(sortOrder), sortBy))
                         .stream().map(this.converter::fromEntity).collect(Collectors.toList());
             }
