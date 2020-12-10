@@ -32,7 +32,7 @@ Run the main function in src -> main -> ShoppingCatalogServiceApplication
 
     gradlew.bat runJar
     
-Make sure that the server is on listing to port 8080 on localhost:
+Make sure that the server is on listing to port 8081 on localhost:
 
     http://localhost:8081
 
