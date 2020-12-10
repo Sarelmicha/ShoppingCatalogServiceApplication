@@ -29,8 +29,6 @@ Run gradle build for building the project:
 # How to run it?
 
 Run the main function in src -> main -> ShoppingCatalogServiceApplication
-
-    gradlew.bat runJar
     
 Make sure that the server is on listing to port 8081 on localhost:
 
