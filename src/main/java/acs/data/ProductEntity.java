@@ -1,11 +1,6 @@
 package acs.data;
 import acs.exceptions.BadRequestException;
-import org.neo4j.driver.internal.shaded.reactor.util.annotation.NonNull;
-import org.neo4j.driver.internal.shaded.reactor.util.annotation.Nullable;
 import org.springframework.data.neo4j.core.schema.*;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
